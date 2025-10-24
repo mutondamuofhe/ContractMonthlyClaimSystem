@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.SqlServer; // Add this using directive
 
 var builder = WebApplication.CreateBuilder(args);
 
