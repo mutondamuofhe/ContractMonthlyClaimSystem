@@ -87,4 +87,4 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Login");
     }
-}
+}//end of class
