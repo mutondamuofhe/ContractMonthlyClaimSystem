@@ -1,0 +1,32 @@
+﻿@model RegisterViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="center-card">
+    <h1>Create Account</h1>
+    <p class="subtext">Register for the Contract Monthly Claim System</p>
+    <form method="post" asp-action="Register">
+        <div class="row">
+            <input asp-for="FirstName" class="input" placeholder="First Name" />
+            <input asp-for="LastName" class="input" placeholder="Last Name" />
+        </div>
+        <label>Email</label>
+        <input asp-for="Email" class="input" />
+        <label>Employee ID</label>
+        <input asp-for="EmployeeId" class="input" />
+        <label>Role</label>
+        <select asp-for="Role" class="input">
+            <option>Lecturer</option>
+            <option>ProgrammeCoordinator</option>
+            <option>AcademicManager</option>
+        </select>
+        <label>Department (Optional)</label>
+        <input asp-for="Department" class="input" />
+        <label>Password</label>
+        <input asp-for="Password" type="password" class="input" />
+        <label>Confirm Password</label>
+        <input asp-for="ConfirmPassword" type="password" class="input" />
+        <button class="btn-primary" type="submit">Create Account</button>
+    </form>
+    <p class="small-link">Already have an account? <a asp-action="Login">Sign in here</a></p>
+</div>

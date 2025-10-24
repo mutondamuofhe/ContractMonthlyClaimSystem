@@ -1,0 +1,47 @@
+﻿@model System.Collections.Generic.List<ClaimRecord>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="center-card">
+    <h1>My Claims</h1>
+    <p class="subtext">Track your claim status</p>
+
+    @foreach (var c in Model)
+    {
+        <div class="claim-card">
+            <div style="display:flex; justify-content:space-between;">
+                <div><strong>Submitted:</strong> @c.SubmittedAt.ToLocalTime().ToString("g")</div>
+                <div>
+                    @if (c.Status == ClaimStatus.Pending)
+                    {
+                        <span class="badge pending">Pending</span>
+                    }
+                    else if (c.Status == ClaimStatus.Approved)
+                    {
+
+                        <span class="badge approved">Approved</span>
+                    }
+                    else
+                    {
+
+                        <span class="badge rejected">Rejected</span>
+                    }
+                </div>
+            </div>
+            <div><strong>Hours:</strong> @c.HoursWorked &nbsp; <strong>Rate:</strong> @c.HourlyRate.ToString("C") &nbsp; <strong>Total:</strong> @(c.HoursWorked* c.HourlyRate).ToString("C")</div>
+            <div><strong>Notes:</strong> @c.Notes</div>
+            @if (c.Files != null && c.Files.Count > 0)
+            {
+                <div>
+                    <strong>Files:</strong>
+                    <ul>
+                        @foreach (var f in c.Files)
+                        {
+                            <li><a href="~/@f.StoredFilePath" target="_blank">@f.FileName</a></li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    }
+</div>

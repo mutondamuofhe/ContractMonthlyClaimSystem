@@ -1,0 +1,44 @@
+﻿@model System.Collections.Generic.List<ClaimRecord>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="center-card">
+    <h1>Pending Claims</h1>
+    <p class="subtext">Approve or reject claims</p>
+
+    @foreach (var c in Model)
+    {
+        <div class="claim-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div><strong>Lecturer:</strong> @c.LecturerId</div>
+                    <div><strong>Submitted:</strong> @c.SubmittedAt.ToLocalTime().ToString("g")</div>
+                </div>
+                <div>
+                    <form asp-action="Approve" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@c.Id" />
+                        <button class="btn-primary" type="submit">Approve</button>
+                    </form>
+                    <form asp-action="Reject" method="post" style="display:inline; margin-left:8px;">
+                        <input type="hidden" name="id" value="@c.Id" />
+                        <button type="submit" style="background:#f06; color:#fff; border:none; padding:10px 12px; border-radius:6px;">Reject</button>
+                    </form>
+                </div>
+            </div>
+            <div><strong>Hours:</strong> @c.HoursWorked &nbsp; <strong>Rate:</strong> @c.HourlyRate.ToString("C") &nbsp; <strong>Total:</strong> @(c.HoursWorked* c.HourlyRate).ToString("C")</div>
+            <div><strong>Notes:</strong> @c.Notes</div>
+            @if (c.Files != null && c.Files.Count > 0)
+            {
+                <div>
+                    <strong>Files:</strong>
+                    <ul>
+                        @foreach (var f in c.Files)
+                        {
+                            <li><a href="~/@f.StoredFilePath" target="_blank">@f.FileName</a></li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    }
+</div>

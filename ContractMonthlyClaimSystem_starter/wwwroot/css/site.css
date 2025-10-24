@@ -1,0 +1,111 @@
+:root {
+    --primary: #d81b60;
+    --accent: #f7c7da;
+    --card-bg: #fff;
+    --border: #f2c7d8;
+}
+
+body {
+    background: linear-gradient(180deg,#ffeef3 0%, #f7d5e6 100%);
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    color: #6a2040;
+    margin: 0;
+    padding: 20px 0;
+}
+
+.center-card {
+    width: 720px;
+    margin: 48px auto;
+    background: var(--card-bg);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-radius: 8px;
+    padding: 28px;
+    border: 1px solid rgba(216,27,96,0.08);
+}
+
+h1 {
+    color: #9b1143;
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.subtext {
+    text-align: center;
+    color: #d34b7b;
+    margin-bottom: 20px;
+}
+
+label {
+    color: #b12356;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #f0c5d4;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.row {
+    display: flex;
+    gap: 12px;
+}
+
+    .row .input {
+        flex: 1;
+    }
+
+.small-link {
+    text-align: center;
+    margin-top: 12px;
+    color: #b13b66;
+    text-decoration: underline;
+    display: block;
+}
+
+.claim-card {
+    border: 1px solid #f0c5d4;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: #fff;
+}
+
+.badge {
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+    .badge.pending {
+        background: #fff3cd;
+        color: #6a3a00;
+    }
+
+    .badge.approved {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge.rejected {
+        background: #f8d7da;
+        color: #721c24;
+    }
