@@ -1,35 +1,53 @@
 ﻿@model System.Collections.Generic.List<ClaimRecord>
+
 @{
+    // Set the layout page for this view
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="center-card">
+    <!-- Page header -->
     <h1>My Claims</h1>
     <p class="subtext">Track your claim status</p>
 
+    <!-- Loop through each claim record in the model -->
     @foreach (var c in Model)
     {
         <div class="claim-card">
+            <!-- Top row: submitted date and status badge -->
             <div style="display:flex; justify-content:space-between;">
-                <div><strong>Submitted:</strong> @c.SubmittedAt.ToLocalTime().ToString("g")</div>
                 <div>
+                    <!-- Display the submitted date in local time -->
+                    <strong>Submitted:</strong> @c.SubmittedAt.ToLocalTime().ToString("g")
+                </div>
+                <div>
+                    <!-- Display a colored badge based on claim status -->
                     @if (c.Status == ClaimStatus.Pending)
                     {
                         <span class="badge pending">Pending</span>
                     }
                     else if (c.Status == ClaimStatus.Approved)
                     {
-
                         <span class="badge approved">Approved</span>
                     }
                     else
                     {
-
                         <span class="badge rejected">Rejected</span>
                     }
                 </div>
             </div>
-            <div><strong>Hours:</strong> @c.HoursWorked &nbsp; <strong>Rate:</strong> @c.HourlyRate.ToString("C") &nbsp; <strong>Total:</strong> @(c.HoursWorked* c.HourlyRate).ToString("C")</div>
+
+            <!-- Claim details: hours worked, hourly rate, and total -->
+            <div>
+                <strong>Hours:</strong> @c.HoursWorked &nbsp;
+                <strong>Rate:</strong> @c.HourlyRate.ToString("C") &nbsp;
+                <strong>Total:</strong> @(c.HoursWorked* c.HourlyRate).ToString("C")
+            </div>
+
+            <!-- Display any notes provided with the claim -->
             <div><strong>Notes:</strong> @c.Notes</div>
+
+            <!-- If there are uploaded files, display them as links -->
             @if (c.Files != null && c.Files.Count > 0)
             {
                 <div>
@@ -37,6 +55,7 @@
                     <ul>
                         @foreach (var f in c.Files)
                         {
+                            <!-- Each file is displayed as a clickable link that opens in a new tab -->
                             <li><a href="~/@f.StoredFilePath" target="_blank">@f.FileName</a></li>
                         }
                     </ul>
