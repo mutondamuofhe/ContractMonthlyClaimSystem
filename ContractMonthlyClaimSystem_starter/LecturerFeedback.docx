@@ -1,0 +1,11 @@
+In this updated version of my project, I implemented all the recommendations from Part 1 and extended the functionality for Part 2 as required. I maintained the original pink theme and improved the overall layout for better navigation and user experience.
+
+I added a complete authentication system that allows users to register and sign in, with a dropdown menu for selecting their role (Lecturer, Academic Manager, or Programme Coordinator). Based on the role, users have access to different features.
+
+For Lecturers, I implemented a claim submission form that includes fields for hours worked, hourly rate, notes, and an option to upload supporting documents (.pdf, .docx, or .xlsx). The files are stored securely in the system, and lecturers can track the status of each claim (Pending, Approved, or Rejected).
+
+For Programme Coordinators and Academic Managers, I created a dashboard that displays all pending claims with options to approve or reject them. Each claim shows all necessary details for verification.
+
+I also added error handling, so if something goes wrong, the system provides clear and meaningful messages to the user. Unit tests were included to ensure reliability and data accuracy.
+
+Overall, the updated prototype demonstrates the required functionality, improved usability, and aligns with the .NET 8.0 LTS environment as per the assessment guidelines.
