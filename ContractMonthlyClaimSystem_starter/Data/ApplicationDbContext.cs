@@ -17,4 +17,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(builder);
     }
+
+    internal void SaveChanges()
+    {
+        throw new NotImplementedException();
+    }
+
+    internal void Update(Claim claim)
+    {
+        throw new NotImplementedException();
+    }
 }

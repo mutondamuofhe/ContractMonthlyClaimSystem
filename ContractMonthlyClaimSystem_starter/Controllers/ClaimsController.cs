@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ContractMonthlyClaimSystem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +26,7 @@ namespace ContractMonthlyClaimSystem_starter.Controllers
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _env;
+        private object _context;
 
         public ClaimsController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, IWebHostEnvironment env)
         {
@@ -38,54 +40,42 @@ namespace ContractMonthlyClaimSystem_starter.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ClaimCreateViewModel model)
+        public async Task<IActionResult> Submit(Claim model, IFormFile uploadedFile)
         {
             if (!ModelState.IsValid) return View(model);
 
-            var userId = _userManager.GetUserId(User);
-            var claim = new ClaimRecord
-            {
-                LecturerId = userId,
-                HoursWorked = model.HoursWorked,
-                HourlyRate = model.HourlyRate,
-                Notes = model.Notes,
-                SubmittedAt = System.DateTime.UtcNow
-            };
+            // Recalculate server-side (security)
+            model.CalculatedAmount = model.HoursWorked * model.HourlyRate;
+            model.SubmittedDate = DateTime.UtcNow;
+            model.Status = "Pending";
+            model.DocumentsUploaded = uploadedFile != null && uploadedFile.Length > 0;
 
-            _db.ClaimRecords.Add(claim);
-           
-
-            if (model.Files != null && model.Files.Count > 0)
+            // (optional) Save file to wwwroot/uploads with unique name; link to claim record
+            if (model.DocumentsUploaded)
             {
-                var allowed = new[] { ".pdf", ".docx", ".xlsx" };
-                long maxBytes = 5 * 1024 * 1024;
-                var uploads = Path.Combine(_env.WebRootPath ?? "wwwroot", "uploads");
+                var uploads = Path.Combine(_env.WebRootPath, "uploads");
                 Directory.CreateDirectory(uploads);
+                var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(uploadedFile.FileName)}";
+                using (var stream = System.IO.File.Create(Path.Combine(uploads, fileName)))
+                    await uploadedFile.CopyToAsync(stream);
 
-                foreach (var file in model.Files)
-                {
-                    if (file.Length == 0) continue;
-                    if (file.Length > maxBytes) continue;
-                    var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-                    if (!allowed.Contains(ext)) continue;
-                    var stored = System.Guid.NewGuid() + ext;
-                    var path = Path.Combine(uploads, stored);
-                    using var fs = new FileStream(path, FileMode.Create);
-                    await file.CopyToAsync(fs);
-
-                    _db.ClaimFiles.Add(new ClaimFile
-                    {
-                        ClaimRecordId = claim.Id,
-                        FileName = file.FileName,
-                        StoredFilePath = Path.Combine("uploads", stored),
-                        Size = file.Length
-                    });
-                }
-                
+                // store filename(s) in a related table or a column (not shown)
             }
 
-            return RedirectToAction("MyClaims");
+            _context.Add(model);
+            await _context.SaveChangesAsync();
+
+            // After saving, run the automated verification processor (see next section)
+            var autoResult = ClaimProcessor.ProcessNewClaim(model, _context);
+            if (autoResult == ClaimProcessorResult.AutoApproved)
+            {
+                // optionally show message
+                TempData["Message"] = "Claim auto-approved by system rules.";
+            }
+
+            return RedirectToAction("Index"); // or lecturer dashboard
         }
+
 
         [HttpGet]
         public async Task<IActionResult> MyClaims()
