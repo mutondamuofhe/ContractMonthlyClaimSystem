@@ -61,6 +61,21 @@
                     </ul>
                 </div>
             }
+            <!-- fields: id="hours" id="rate" id="amount" -->
+            <input id="hours" name="HoursWorked" type="number" step="0.1" />
+            <input id="rate" name="HourlyRate" type="number" step="0.01" />
+            <input id="amount" name="CalculatedAmount" readonly />
+
+            <script>
+                document.getElementById('hours').addEventListener('input', calc);
+                document.getElementById('rate').addEventListener('input', calc);
+                function calc(){
+                  const h = parseFloat(document.getElementById('hours').value) || 0;
+                  const r = parseFloat(document.getElementById('rate').value) || 0;
+                  document.getElementById('amount').value = (h * r).toFixed(2);
+                }
+            </script>
+
         </div>
     }
 </div>
