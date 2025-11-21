@@ -1,31 +1,87 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ContractMonthlyClaimSystem.Models.ApplicationUser> SignInManager
+@inject UserManager<ContractMonthlyClaimSystem.Models.ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contract Monthly Claim System</title>
-    <link rel="stylesheet" href="~/css/site.css" />
+    <title>@ViewData["Title"] - Contract Monthly Claim System</title>
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="page-wrap">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">CMCS</a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Claims" asp-action="MyClaims">My Claims</a>
+                    </li>
+
+                    @* HR link: only show if user is in HR role *@
+                    @if (User.IsInRole("HR"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="HR" asp-action="Export">Export Approved Claims</a>
+                        </li>
+                    }
+
+                </ul>
+
+                <ul class="navbar-nav">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="page-wrap container mt-3">
         @RenderBody()
     </div>
+
+    <footer class="footer mt-auto py-3">
+        <div class="container">
+            <span class="text-muted">&copy; @DateTime.Now.Year - Contract Monthly Claim System</span>
+        </div>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        function confirmApprove() {
+            return confirm('Are you sure you want to approve this claim?');
+        }
+
+        function confirmReject(form) {
+            var reason = prompt('Please enter a short reason for rejection (optional):');
+            if (reason === null) {
+                // user cancelled
+                return false;
+            }
+            // set hidden field
+            var input = form.querySelector('.reject-reason');
+            if (input) input.value = reason;
+            return true;
+        }
+    </script>
 </body>
 </html>
-<script>
-    function confirmApprove() {
-      return confirm('Are you sure you want to approve this claim?');
-    }
-
-    function confirmReject(form) {
-      var reason = prompt('Please enter a short reason for rejection (optional):');
-      if (reason === null) {
-        // user cancelled
-        return false;
-      }
-      // set hidden field
-      var input = form.querySelector('.reject-reason');
-      if (input) input.value = reason;
-      return true;
-    }
-</script>
