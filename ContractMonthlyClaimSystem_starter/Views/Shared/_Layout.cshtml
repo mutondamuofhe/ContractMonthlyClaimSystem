@@ -12,3 +12,20 @@
     </div>
 </body>
 </html>
+<script>
+    function confirmApprove() {
+      return confirm('Are you sure you want to approve this claim?');
+    }
+
+    function confirmReject(form) {
+      var reason = prompt('Please enter a short reason for rejection (optional):');
+      if (reason === null) {
+        // user cancelled
+        return false;
+      }
+      // set hidden field
+      var input = form.querySelector('.reject-reason');
+      if (input) input.value = reason;
+      return true;
+    }
+</script>
