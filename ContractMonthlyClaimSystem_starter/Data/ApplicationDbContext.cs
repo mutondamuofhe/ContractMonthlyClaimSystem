@@ -12,6 +12,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<ClaimRecord> ClaimRecords { get; set; }
     public DbSet<ClaimFile> ClaimFiles { get; set; }
+    public object Database { get; internal set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
