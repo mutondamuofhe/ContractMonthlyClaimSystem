@@ -1,11 +1,66 @@
-In this updated version of my project, I implemented all the recommendations from Part 1 and extended the functionality for Part 2 as required. I maintained the original pink theme and improved the overall layout for better navigation and user experience.
+﻿ Updated Lecturer Feedback – Focus on Part 3
 
-I added a complete authentication system that allows users to register and sign in, with a dropdown menu for selecting their role (Lecturer, Academic Manager, or Programme Coordinator). Based on the role, users have access to different features.
+In this updated version of my project, I focused on implementing the automation and system improvements required for Part 3. I built on the foundation created in Part 2 and enhanced the system to align with the assessment requirements and industry standards.
 
-For Lecturers, I implemented a claim submission form that includes fields for hours worked, hourly rate, notes, and an option to upload supporting documents (.pdf, .docx, or .xlsx). The files are stored securely in the system, and lecturers can track the status of each claim (Pending, Approved, or Rejected).
+🔹 Automation Rules (Part 3)
 
-For Programme Coordinators and Academic Managers, I created a dashboard that displays all pending claims with options to approve or reject them. Each claim shows all necessary details for verification.
+I implemented a ClaimProcessor service to automatically handle incoming claims based on business rules:
 
-I also added error handling, so if something goes wrong, the system provides clear and meaningful messages to the user. Unit tests were included to ensure reliability and data accuracy.
+Condition	            / System 
+-----------------------------------------------------------------
+No documents uploaded	/ Claim remains Pending – Needs Documents
+Amount under threshold	/ Auto-Approved by the system
+Amount too high	        / Escalated to Academic Manager
 
-Overall, the updated prototype demonstrates the required functionality, improved usability, and aligns with the .NET 8.0 LTS environment as per the assessment guidelines.
+This helps reduce manual work and improves turnaround times.
+
+🔹 Coordinator / Academic Manager Dashboard
+
+The dashboard was updated to visually reflect the automation process, allowing users to:
+
+View Pending & Escalated claims
+
+See who processed the claim and when
+
+Trigger Auto Check manually using a button
+
+Approve / Reject with confirmation modals and reason input
+
+This improved usability and made the verification workflow more efficient.
+
+🔹 HR Automation – CSV Export
+
+I created a dedicated HR module that includes:
+
+An Export page with date filters
+
+CSV file generation of all approved claims
+
+Secure download with all required fields for payroll
+
+This fulfills the requirement for invoice/report generation for finance processing.
+
+🔹 Unit Testing with xUnit + EF InMemory
+
+To ensure reliability and quality:
+
+I added unit tests for automation rules
+
+Used EntityFrameworkCore.InMemory to simulate database interactions
+
+Tested Auto-Approval, Escalation, and Needs-Docs logic successfully
+
+This improves system stability and proves correct implementation of business logic.
+
+🔹 Overall Impact
+
+Part 3 transformed the system from a simple claim submission app into a semi-automated claims processing platform with:
+ Role-based access control
+ Smart automation logic
+ HR report generation
+ Error handling and validation
+ Unit testing for reliability
+
+ Conclusion
+
+The system is now well-aligned with real-world industry use cases and meets all requirements for Part 3 of the POE. With clear role separation, automation logic, and test coverage, the system is ready for further deployment or extension.
